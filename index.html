@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parachute Simulation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Parachute Descent Simulation</h1>
+
+        <div class="controls">
+            <label for="area-select">Select Parachute Surface Area:</label>
+            <select id="area-select">
+                <option value="1">1 m²</option>
+                <option value="2">2 m²</option>
+                <option value="3">3 m²</option>
+                <option value="4">4 m²</option>
+                <option value="5">5 m²</option>
+            </select>
+            <button id="start-button">Start Descent</button>
+        </div>
+
+        <div id="animation-container">
+            <div id="soldier-parachute">
+                <div class="parachute"></div>
+                <div class="soldier"></div>
+            </div>
+            <div id="ground-line"></div>
+        </div>
+
+        <div class="data-output">
+            <h2>Simulation Results</h2>
+            <p>Time Taken to Reach Ground: <span id="time-output">---</span> seconds</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
