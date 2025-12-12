@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-button');
     const soldierParachute = document.getElementById('soldier-parachute');
     const timeOutput = document.getElementById('time-output');
-    const animationContainer = document.getElementById('animation-container');
-    const parachuteElement = document.querySelector('.parachute'); // New element to target
+    const parachuteElement = document.querySelector('.parachute'); // Target for sizing
 
     // --- PHYSICS CONSTANTS ---
     const HEIGHT = 500; // Simulated height of descent in meters
@@ -16,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // The pixel distance the animation covers
     const ANIMATION_DISTANCE_PX = 450; 
+    
+    // Size Mapping Constants (for visual change)
+    const MIN_AREA = 1;
+    const MAX_AREA = 5;
+    const MIN_SIZE_PX = 40; // Smallest parachute width in px (for 1m²)
+    const MAX_SIZE_PX = 100; // Largest parachute width in px (for 5m²)
     
     // Set initial position
     soldierParachute.style.top = '0px'; 
@@ -28,12 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {number} The calculated time in seconds.
      */
     function calculateTime(area) {
-        // 1. Calculate Terminal Velocity (Vt)
         // Formula: Vt = sqrt( (2 * mass * g) / (rho * Area * Cd) )
         const vt_squared = (2 * MASS * GRAVITY) / (AIR_DENSITY * area * DRAG_COEFFICIENT);
         const terminalVelocity = Math.sqrt(vt_squared);
 
-        // 2. Calculate Descent Time (approximated)
+        // Time = Height / Terminal Velocity
         const timeSeconds = HEIGHT / terminalVelocity;
         
         return timeSeconds;
@@ -49,20 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
         timeOutput.textContent = timeSeconds.toFixed(2);
         
         // 2. Adjust Parachute Size (Visual Change)
-        // We will map the area (1m² to 5m²) to a pixel size (40px to 100px)
-        const minArea = 1;
-        const maxArea = 5;
-        const minSize = 40; // Smallest parachute width in px
-        const maxSize = 100; // Largest parachute width in px
-
-        // Linear interpolation to map the area to a pixel size
-        const sizeRatio = (area - minArea) / (maxArea - minArea);
-        const newWidth = minSize + sizeRatio * (maxSize - minSize);
+        // Map the area to a pixel size using linear interpolation
+        const sizeRatio = (area - MIN_AREA) / (MAX_AREA - MIN_AREA);
+        const newWidth = MIN_SIZE_PX + sizeRatio * (MAX_SIZE_PX - MIN_SIZE_PX);
         
-        // Apply the new width to the parachute element
+        // Apply the new width and a proportional height
         parachuteElement.style.width = `${newWidth}px`;
-        // Keep the height proportional to the width (e.g., half the width for the dome shape)
         parachuteElement.style.height = `${newWidth / 2}px`;
+
+        // Ensure the soldier remains centered horizontally
+        soldierParachute.style.transform = 'translateX(-50%)'; 
     }
 
     /**
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Disable button and reset position
         startButton.disabled = true;
         soldierParachute.style.top = '0px';
-        soldierParachute.style.transition = 'none'; // Remove transition for reset
+        soldierParachute.style.transition = 'none'; 
 
         // Force a reflow to apply 'none' before adding the new transition
         void soldierParachute.offsetHeight; 
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Re-enable button after animation finishes
         setTimeout(() => {
             startButton.disabled = false;
-        }, timeSeconds * 1000); // Convert seconds to milliseconds
+        }, timeSeconds * 1000); 
     }
 
     // --- EVENT LISTENERS ---
