@@ -1,72 +1,150 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    background-color: #f0f8ff;
+    min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    background-color: #f4f4f9;
+}
+
+.dashboard {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
 }
 
 h1 {
-    color: #2c3e50;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-#sim-container {
+.controls, .data-output {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+#surface-select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+/* Simulation Area Visuals */
+#simulation-area {
     position: relative;
-    border: 4px solid #34495e;
-    background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-canvas {
-    display: block;
-}
-
-.controls {
+    height: 150px;
+    border: 1px solid #ccc;
     margin-top: 20px;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 360px;
+    align-items: flex-end; 
 }
 
-.slider-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#surface-display {
+    position: absolute;
     width: 100%;
+    height: 50px; 
+    bottom: 0;
+    border-top: 5px solid #333;
 }
 
-.button-group {
+#block-and-spring {
+    transition: transform 0.05s ease-out; 
+    position: absolute;
+    bottom: 50px; 
+    left: 10%;
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    /* IMPORTANT: Align items to the left to keep the spring next to the block */
+    align-items: center; 
+    z-index: 10; 
 }
 
-label {
-    font-weight: bold;
-    margin-bottom: 5px;
+#wood-block {
+    width: 60px;
+    height: 40px;
+    background-color: #8B4513; 
+    border: 1px solid #65300d;
+    cursor: grab; 
 }
 
-button {
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
+/* --- SPRING BALANCE STYLES --- */
+.spring-balance {
+    display: flex;
+    align-items: center;
+    /* Margin to separate the block and the spring slightly */
+    margin-left: 5px; 
+}
+
+.spring-hook {
+    width: 10px;
+    height: 15px;
+    background-color: #555;
+    border-radius: 0 50% 50% 0; /* Creates a hook shape */
+}
+
+.scale-body {
+    width: 100px; /* Width of the balance tube */
+    height: 25px;
+    background-color: #c9c9c9;
+    border: 2px solid #666;
     border-radius: 5px;
-    font-weight: bold;
-    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
 }
 
-#startBtn { background-color: #27ae60; color: white; }
-#stopBtn { background-color: #e74c3c; color: white; }
-#resetBtn { background-color: #7f8c8d; color: white; }
+.scale-indicator {
+    /* This element simulates the red/black measuring scale */
+    position: absolute;
+    right: 0; /* Anchors the right side */
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #ccc 0%, #ccc 80%, #d9534f 80%, #d9534f 100%); 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Text starts on the left */
+    padding-left: 5px;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #000000;
+    /* Transition applied by JS to stretch the scale */
+    transition: transform 0.05s ease-out; 
+}
 
-button:hover { opacity: 0.9; }
-button:active { transform: translateY(1px); }
+
+/* Specific Surface Styles (Updated by JavaScript) */
+.plastic { background-color: #D3E0EA; }
+.metal { background-color: #A9A9A9; }
+.sandpaper { background-color: #CCAA99; background-image: repeating-linear-gradient(45deg, #775544 0, #775544 1px, transparent 1px, transparent 5px); }
+.carpet { background-color: #4CAF50; background-image: radial-gradient(#6BBF70 10%, transparent 11%); background-size: 10px 10px; }
+
+
+/* Data Output Styling */
+.data-output p {
+    margin: 5px 0;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.feedback-message {
+    font-weight: bold;
+    margin-top: 10px;
+    min-height: 20px; 
+}
+
+#required-force-display {
+    color: #5cb85c;
+    font-size: 1.1em;
+}
