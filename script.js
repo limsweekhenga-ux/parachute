@@ -1,141 +1,88 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
-    const surfaceSelect = document.getElementById('surface-select');
-    const surfaceDisplay = document.getElementById('surface-display');
-    const requiredForceDisplay = document.getElementById('required-force-display');
-    const forceDisplay = document.getElementById('force-display'); // Used to display the number
-    const pullFeedback = document.getElementById('pull-feedback');
-    const blockAndSpring = document.getElementById('block-and-spring');
-    const woodBlock = document.getElementById('wood-block'); 
+    // --- DOM ELEMENTS ---
+    const areaSelect = document.getElementById('area-select');
+    const startButton = document.getElementById('start-button');
+    const soldierParachute = document.getElementById('soldier-parachute');
+    const timeOutput = document.getElementById('time-output');
+    const animationContainer = document.getElementById('animation-container');
+
+    // --- PHYSICS CONSTANTS ---
+    const HEIGHT = 500; // Simulated height of descent in meters
+    const MASS = 100; // Total mass of soldier and gear in kg
+    const DRAG_COEFFICIENT = 1.5; // Cd, typical for a parachute
+    const AIR_DENSITY = 1.225; // rho, kg/m^3
+    const GRAVITY = 9.81; // g, m/s^2
+
+    // The pixel distance the animation covers
+    const ANIMATION_DISTANCE_PX = 450; 
     
-    // NEW: Target the indicator element for visual stretching
-    const scaleIndicator = document.querySelector('.scale-indicator'); 
+    // Set initial position
+    soldierParachute.style.top = '0px'; 
+    startButton.disabled = false;
 
-    // Physics Constants and Variables
-    const MASS_BLOCK = 0.5; // kg
-    const GRAVITY = 9.81; // m/s^2
-    let requiredPullForce = 0; 
-
-    // Dragging state variables
-    let isDragging = false;
-    const START_OFFSET = 10; // Initial left position (in percentage)
-    const MAX_PULL_PIXELS = 300; // Max distance the block can be dragged
-    const FORCE_TO_PIXEL_RATIO = 50; // How many pixels of stretch equals 1 Newton of force (50 px/N)
-    
-    // Spring Balance visual stretching constants
-    const MAX_INDICATOR_STRETCH = 50; // Max pixels the indicator can stretch
-
-    // Friction Coefficients 
-    const frictionCoefficients = {
-        plastic: 0.1,    
-        metal: 0.25,     
-        sandpaper: 0.5,  
-        carpet: 0.8      
-    };
 
     /**
-     * Calculates the required pulling force based on the selected surface.
+     * Calculates the time taken for descent based on surface area.
+     * @param {number} area - Surface area of the parachute (m²).
+     * @returns {number} The calculated time in seconds.
      */
-    function updateRequiredForce(surfaceKey) {
-        const mu_k = frictionCoefficients[surfaceKey];
-        requiredPullForce = mu_k * MASS_BLOCK * GRAVITY;
+    function calculateTime(area) {
+        // 1. Calculate Terminal Velocity (Vt)
+        // Formula: Vt = sqrt( (2 * mass * g) / (rho * Area * Cd) )
+        const vt_squared = (2 * MASS * GRAVITY) / (AIR_DENSITY * area * DRAG_COEFFICIENT);
+        const terminalVelocity = Math.sqrt(vt_squared);
 
-        // Update visuals and reset block position
-        surfaceDisplay.className = '';
-        surfaceDisplay.classList.add(surfaceKey);
-        requiredForceDisplay.textContent = requiredPullForce.toFixed(2);
+        // 2. Calculate Descent Time (approximated)
+        // Time is Height / Average Velocity. 
+        // We use the full height (500m) divided by the terminal velocity.
+        const timeSeconds = HEIGHT / terminalVelocity;
         
-        // Reset block position and spring indicator
-        blockAndSpring.style.transform = 'translateX(0px)';
-        scaleIndicator.style.transform = `translateX(0px)`;
-        forceDisplay.textContent = '0.00';
-        pullFeedback.textContent = 'Click and drag the block to pull.';
-        pullFeedback.style.color = '#333';
+        return timeSeconds;
     }
 
     /**
-     * Handles the start of the dragging action.
+     * Executes the animation based on the calculated time.
      */
-    function startDrag(e) {
-        isDragging = true;
-        e.preventDefault(); 
+    function startAnimation() {
+        const area = parseFloat(areaSelect.value);
+        const timeSeconds = calculateTime(area);
         
-        window.addEventListener('mousemove', dragMove);
-        window.addEventListener('mouseup', dragEnd);
-        window.addEventListener('touchmove', dragMove);
-        window.addEventListener('touchend', dragEnd);
-    }
+        timeOutput.textContent = timeSeconds.toFixed(2);
+        
+        // Disable button and reset position
+        startButton.disabled = true;
+        soldierParachute.style.top = '0px';
+        soldierParachute.style.transition = 'none'; // Remove transition for reset
 
-    /**
-     * Handles the movement while dragging.
-     */
-    function dragMove(e) {
-        if (!isDragging) return;
+        // Force a reflow to apply 'none' before adding the new transition
+        void soldierParachute.offsetHeight; 
 
-        const clientX = e.clientX || e.touches[0].clientX;
-        const simAreaRect = document.getElementById('simulation-area').getBoundingClientRect();
+        // Set the CSS transition properties:
+        // Transition property: top
+        // Duration: timeSeconds (mapped to seconds, so 1:1)
+        // Easing: linear (since terminal velocity is constant)
+        soldierParachute.style.transition = `top ${timeSeconds.toFixed(2)}s linear`;
         
-        let dragDistance = clientX - simAreaRect.left - (simAreaRect.width * START_OFFSET / 100);
-        dragDistance = Math.max(0, Math.min(dragDistance, MAX_PULL_PIXELS));
-        
-        const appliedForce = dragDistance / FORCE_TO_PIXEL_RATIO;
-        
-        // 1. Update the visual spring balance number
-        forceDisplay.textContent = appliedForce.toFixed(2);
-        
-        // 2. Animate the spring indicator visually
-        // The pull distance is small since the spring stretches, not the whole block container
-        const indicatorStretch = appliedForce * (MAX_INDICATOR_STRETCH / requiredPullForce);
-        const stretchAmount = Math.min(indicatorStretch, MAX_INDICATOR_STRETCH);
-        
-        // Move the whole block and spring assembly to the right
-        blockAndSpring.style.transform = `translateX(${dragDistance}px)`;
-        
-        // Move the spring indicator to the left (negative X) to simulate extension
-        scaleIndicator.style.transform = `translateX(${-stretchAmount}px)`;
+        // Start the animation by setting the final position
+        soldierParachute.style.top = `${ANIMATION_DISTANCE_PX}px`; 
 
-
-        // Provide movement feedback
-        if (appliedForce >= requiredPullForce) {
-            pullFeedback.textContent = `SUCCESS! Block is moving at ${appliedForce.toFixed(2)} N.`;
-            pullFeedback.style.color = '#5cb85c'; 
-        } else if (appliedForce > 0) {
-            pullFeedback.textContent = 'Force applied, but not enough to move the block.';
-            pullFeedback.style.color = '#f0ad4e'; 
-        } else {
-            pullFeedback.textContent = 'Click and drag the block to pull.';
-            pullFeedback.style.color = '#333';
-        }
-    }
-
-    /**
-     * Handles the end of the dragging action.
-     */
-    function dragEnd() {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        window.removeEventListener('mousemove', dragMove);
-        window.removeEventListener('mouseup', dragEnd);
-        window.removeEventListener('touchmove', dragMove);
-        window.removeEventListener('touchend', dragEnd);
-        
-        // Snap the block back and reset indicator
-        blockAndSpring.style.transform = 'translateX(0px)';
-        scaleIndicator.style.transform = `translateX(0px)`;
-        forceDisplay.textContent = '0.00';
-        updateRequiredForce(surfaceSelect.value); 
+        // Re-enable button after animation finishes
+        setTimeout(() => {
+            startButton.disabled = false;
+        }, timeSeconds * 1000); // Convert seconds to milliseconds
     }
 
     // --- EVENT LISTENERS ---
-    surfaceSelect.addEventListener('change', (event) => {
-        updateRequiredForce(event.target.value);
+    startButton.addEventListener('click', startAnimation);
+    
+    // Initial calculation display
+    areaSelect.addEventListener('change', () => {
+        const area = parseFloat(areaSelect.value);
+        const timeSeconds = calculateTime(area);
+        timeOutput.textContent = timeSeconds.toFixed(2);
     });
 
-    woodBlock.addEventListener('mousedown', startDrag);
-    woodBlock.addEventListener('touchstart', startDrag);
-
-
-    // Initialize the simulation with the default surface
-    updateRequiredForce(surfaceSelect.value);
+    // Run initial calculation when page loads
+    const initialArea = parseFloat(areaSelect.value);
+    timeOutput.textContent = calculateTime(initialArea).toFixed(2);
 });
