@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ELEMENTS ---
     const areaSelect = document.getElementById('area-select');
     const startButton = document.getElementById('start-button');
     const stopButton = document.getElementById('stop-button');
@@ -8,29 +7,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const parachuteVisual = document.querySelector('.parachute');
     const timeOutput = document.getElementById('time-output');
 
-    // --- PHYSICS SETTINGS ---
+    // Constants
     const HEIGHT_M = 400;
     const MASS_KG = 70;
     const GRAVITY = 9.81;
     const AIR_DENSITY = 1.225;
     const DRAG_COEFF = 1.4;
-    const PIXEL_LIMIT = 320; // Landing point
+    const LANDING_PX = 320;
 
     let animationTimeout;
 
-    /**
-     * Updates only the descent time and parachute size
-     */
-    function updateSettings() {
+    function getPhysics() {
         const area = parseFloat(areaSelect.value);
         const weight = MASS_KG * GRAVITY;
-        const terminalVel = Math.sqrt((2 * weight) / (AIR_DENSITY * area * DRAG_COEFF));
-        const totalTime = HEIGHT_M / terminalVel;
+        const vt = Math.sqrt((2 * weight) / (AIR_DENSITY * area * DRAG_COEFF));
+        return HEIGHT_M / vt;
+    }
 
-        timeOutput.textContent = totalTime.toFixed(2);
+    function updateVisuals() {
+        const time = getPhysics();
+        timeOutput.textContent = time.toFixed(2);
 
-        // Resize Parachute
-        const pWidth = 40 + (area - 1) * 20;
+        // Adjust Parachute Size
+        const area = parseFloat(areaSelect.value);
+        const pWidth = 40 + (area - 1) * 25;
         parachuteVisual.style.width = `${pWidth}px`;
         parachuteVisual.style.height = `${pWidth / 2}px`;
 
@@ -39,64 +39,52 @@ document.addEventListener('DOMContentLoaded', () => {
         soldierParachute.style.top = '0px';
     }
 
-    function startDescent() {
-        const area = parseFloat(areaSelect.value);
-        const weight = MASS_KG * GRAVITY;
-        const terminalVel = Math.sqrt((2 * weight) / (AIR_DENSITY * area * DRAG_COEFF));
-        const totalTime = HEIGHT_M / terminalVel;
-
+    function start() {
+        const time = getPhysics();
         startButton.disabled = true;
         stopButton.disabled = false;
         areaSelect.disabled = true;
 
-        // Reset to top before falling
         soldierParachute.style.transition = 'none';
         soldierParachute.style.top = '0px';
 
         setTimeout(() => {
-            soldierParachute.style.transition = `top ${totalTime.toFixed(2)}s linear`;
-            soldierParachute.style.top = `${PIXEL_LIMIT}px`;
+            soldierParachute.style.transition = `top ${time.toFixed(2)}s linear`;
+            soldierParachute.style.top = `${LANDING_PX}px`;
         }, 50);
 
         animationTimeout = setTimeout(() => {
             stopButton.disabled = true;
             startButton.disabled = false;
             areaSelect.disabled = false;
-        }, totalTime * 1000);
+        }, time * 1000);
     }
 
-    function stopDescent() {
+    function stop() {
         clearTimeout(animationTimeout);
-        
-        // Capture current position and freeze
-        const computedStyle = window.getComputedStyle(soldierParachute);
-        const currentPos = computedStyle.getPropertyValue('top');
-        
+        const currentTop = window.getComputedStyle(soldierParachute).top;
         soldierParachute.style.transition = 'none';
-        soldierParachute.style.top = currentPos;
+        soldierParachute.style.top = currentTop;
 
         startButton.disabled = false;
         stopButton.disabled = true;
         areaSelect.disabled = false;
     }
 
-    function resetDescent() {
+    function reset() {
         clearTimeout(animationTimeout);
         soldierParachute.style.transition = 'none';
         soldierParachute.style.top = '0px';
-        
         startButton.disabled = false;
         stopButton.disabled = true;
         areaSelect.disabled = false;
-        updateSettings();
+        updateVisuals();
     }
 
-    // --- LISTENERS ---
-    areaSelect.addEventListener('change', updateSettings);
-    startButton.addEventListener('click', startDescent);
-    stopButton.addEventListener('click', stopDescent);
-    resetButton.addEventListener('click', resetDescent);
+    areaSelect.addEventListener('change', updateVisuals);
+    startButton.addEventListener('click', start);
+    stopButton.addEventListener('click', stop);
+    resetButton.addEventListener('click', reset);
 
-    // Initial State
-    updateSettings();
+    updateVisuals();
 });
