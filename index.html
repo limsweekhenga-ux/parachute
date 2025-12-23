@@ -3,52 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parachute Descent Simulation</title>
+    <title>Toy Soldier Parachute Simulation</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="dashboard">
-        <h1>Parachute Descent Simulation</h1>
+        <h1>Toy Soldier Parachute Lab</h1>
 
         <div class="controls">
-            <label for="area-select">Parachute Surface Area (A):</label>
-            <select id="area-select">
-                <option value="1">1 m²</option>
-                <option value="2">2 m²</option>
-                <option value="3">3 m²</option>
-                <option value="4">4 m²</option>
-                <option value="5">5 m²</option>
-            </select>
-            <button id="start-button">Start Descent</button>
+            <div class="input-group">
+                <label for="area-select">Parachute Surface Area:</label>
+                <select id="area-select">
+                    <option value="1">1 m²</option>
+                    <option value="2">2 m²</option>
+                    <option value="3">3 m²</option>
+                    <option value="4">4 m²</option>
+                    <option value="5">5 m²</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button id="start-button">Start</button>
+                <button id="stop-button" disabled>Stop</button>
+                <button id="reset-button">Reset</button>
+            </div>
         </div>
 
         <div id="animation-container">
             <div id="soldier-parachute">
+                <div class="parachute-strings"></div>
                 <div class="parachute"></div>
-                <div class="soldier"></div>
+                <div class="toy-soldier">
+                    <div class="head"></div>
+                    <div class="torso"></div>
+                    <div class="arms"></div>
+                    <div class="legs"></div>
+                </div>
             </div>
             <div id="ground-line"></div>
         </div>
 
         <div class="data-output">
-            <h2>Simulation Data</h2>
-            <div class="data-grid">
-                <div class="data-item">
-                    <span class="label">Time to Reach Ground:</span>
-                    <span id="time-output" class="value">0.00</span> <span class="unit">s</span>
-                </div>
-                <div class="data-item">
-                    <span class="label">Average Speed:</span>
-                    <span id="speed-output" class="value">0.00</span> <span class="unit">m/s</span>
-                </div>
-                <div class="data-item">
-                    <span class="label">Descent Height:</span>
-                    <span id="height-output" class="value">0</span> <span class="unit">m</span>
-                </div>
-                <div class="data-item">
-                    <span class="label">Soldier Weight:</span>
-                    <span id="weight-output" class="value">0</span> <span class="unit">N</span>
-                </div>
+            <h2>Experiment Results</h2>
+            <div class="time-display">
+                <span class="label">Time for Descent:</span>
+                <span id="time-output">0.00</span> <span class="unit">seconds</span>
             </div>
         </div>
     </div>
