@@ -1,88 +1,125 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #f4f4f9;
+    background-color: #d1d8e0;
 }
 
 .dashboard {
     background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     width: 90%;
-    max-width: 600px;
+    max-width: 500px;
     text-align: center;
 }
 
-h1 {
-    color: #333;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
+h1 { color: #2d3436; margin-bottom: 20px; }
+
+.controls {
     margin-bottom: 20px;
-}
-
-.controls, .data-output {
-    margin: 20px 0;
     padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fafafa;
+    background: #f1f2f6;
+    border-radius: 10px;
 }
 
-/* --- ANIMATION STYLING --- */
+.input-group { margin-bottom: 15px; }
 
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+#start-button { background-color: #2ecc71; }
+#stop-button { background-color: #e74c3c; }
+#reset-button { background-color: #f1c40f; color: #2d3436; }
+
+button:disabled { background-color: #b2bec3; cursor: not-allowed; }
+
+/* Animation Window */
 #animation-container {
     position: relative;
     width: 100%;
-    height: 500px; /* Defines the visible drop zone */
-    margin: 20px auto;
-    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 80%); /* Sky background */
-    border: 1px solid #ccc;
+    height: 400px;
+    background: linear-gradient(to bottom, #74b9ff 0%, #a29bfe 100%);
+    border-radius: 10px;
     overflow: hidden;
+    margin: 20px 0;
+    border: 3px solid #636e72;
 }
 
 #ground-line {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 50px;
-    background-color: #4CAF50; /* Green ground */
-    border-top: 5px solid #38763C;
+    height: 30px;
+    background-color: #27ae60;
 }
 
 #soldier-parachute {
     position: absolute;
     left: 50%;
-    top: 0; /* Starts at the top */
+    top: 0;
     transform: translateX(-50%);
-    /* The transition is set by JavaScript */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .parachute {
-    width: 80px;
+    background-color: #d63031;
+    border-radius: 100px 100px 0 0;
+    transition: width 0.3s ease, height 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+.parachute-strings {
+    position: absolute;
+    top: 10px;
+    width: 100%;
     height: 40px;
-    background-color: rgba(255, 165, 0, 0.7); /* Orange parachute */
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    margin-bottom: 5px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    z-index: 1;
 }
 
-.soldier {
-    width: 10px;
-    height: 20px;
-    background-color: #000;
-    margin: 0 auto;
+/* Toy Soldier Shape */
+.toy-soldier {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5px;
 }
 
-/* Data Output Styling */
-.data-output p {
-    font-size: 1.2em;
-    font-weight: bold;
+.head { width: 8px; height: 8px; background: #4b6584; border-radius: 50%; }
+.torso { width: 10px; height: 14px; background: #4b6584; border-radius: 2px; margin-top: 1px; }
+.arms { width: 18px; height: 4px; background: #4b6584; margin-top: -10px; border-radius: 2px; }
+.legs { width: 10px; height: 10px; border-left: 3px solid #4b6584; border-right: 3px solid #4b6584; margin-top: 1px; }
+
+/* Data Output */
+.data-output {
+    padding: 15px;
+    background: #2d3436;
+    color: white;
+    border-radius: 10px;
 }
-#time-output {
-    color: #d9534f;
-}
+
+.time-display { font-size: 1.4rem; font-weight: bold; }
+#time-output { color: #55efc4; }
+.unit { font-size: 0.9rem; color: #b2bec3; }
