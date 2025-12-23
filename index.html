@@ -3,36 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parachute Simulation</title>
+    <title>Toy Soldier Parachute Simulation</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard">
-        <h1>Parachute Descent Simulation</h1>
 
-        <div class="controls">
-            <label for="area-select">Select Parachute Surface Area:</label>
-            <select id="area-select">
-                <option value="1">1 m²</option>
-                <option value="2">2 m²</option>
-                <option value="3">3 m²</option>
-                <option value="4">4 m²</option>
-                <option value="5">5 m²</option>
-            </select>
-            <button id="start-button">Start Descent</button>
+    <h1>Parachute Descent Simulator</h1>
+
+    <div id="sim-container">
+        <canvas id="simCanvas" width="400" height="500"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="slider-group">
+            <label>Surface Area: <span id="areaVal">50</span></label>
+            <input type="range" id="areaSlider" min="10" max="150" value="50">
         </div>
-
-        <div id="animation-container">
-            <div id="soldier-parachute">
-                <div class="parachute"></div>
-                <div class="soldier"></div>
-            </div>
-            <div id="ground-line"></div>
-        </div>
-
-        <div class="data-output">
-            <h2>Simulation Results</h2>
-            <p>Time Taken to Reach Ground: <span id="time-output">---</span> seconds</p>
+        
+        <div class="button-group">
+            <button id="startBtn">Start Drop</button>
+            <button id="stopBtn">Stop</button>
+            <button id="resetBtn">Reset</button>
         </div>
     </div>
 
