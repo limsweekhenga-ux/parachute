@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toy Soldier Parachute Simulation</title>
+    <title>Toy Soldier Parachute Lab</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,23 +30,26 @@
 
         <div id="animation-container">
             <div id="soldier-parachute">
-                <div class="parachute-strings"></div>
                 <div class="parachute"></div>
+                
+                <div class="strings-container">
+                    <div class="string left"></div>
+                    <div class="string right"></div>
+                </div>
+
                 <div class="toy-soldier">
-                    <div class="head"></div>
-                    <div class="torso"></div>
-                    <div class="arms"></div>
-                    <div class="legs"></div>
+                    <div class="soldier-head"></div>
+                    <div class="soldier-body"></div>
+                    <div class="soldier-legs"></div>
                 </div>
             </div>
             <div id="ground-line"></div>
         </div>
 
         <div class="data-output">
-            <h2>Experiment Results</h2>
-            <div class="time-display">
+            <div class="time-box">
                 <span class="label">Time for Descent:</span>
-                <span id="time-output">0.00</span> <span class="unit">seconds</span>
+                <span id="time-output">0.00</span> <span class="unit">s</span>
             </div>
         </div>
     </div>
