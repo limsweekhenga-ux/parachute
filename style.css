@@ -1,74 +1,70 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #d1d8e0;
+    background-color: #cbd5e0;
 }
 
 .dashboard {
     background-color: #ffffff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     width: 90%;
     max-width: 500px;
     text-align: center;
 }
 
-h1 { color: #2d3436; margin-bottom: 20px; }
-
 .controls {
-    margin-bottom: 20px;
+    background: #f7fafc;
     padding: 15px;
-    background: #f1f2f6;
-    border-radius: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
 }
-
-.input-group { margin-bottom: 15px; }
 
 .button-group {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 button {
-    padding: 10px 20px;
-    color: white;
+    padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
-    text-transform: uppercase;
+    color: white;
 }
 
-#start-button { background-color: #2ecc71; }
-#stop-button { background-color: #e74c3c; }
-#reset-button { background-color: #f1c40f; color: #2d3436; }
+#start-button { background-color: #48bb78; }
+#stop-button { background-color: #f56565; }
+#reset-button { background-color: #ed8936; }
 
-button:disabled { background-color: #b2bec3; cursor: not-allowed; }
+button:disabled { background-color: #a0aec0; cursor: not-allowed; }
 
 /* Animation Window */
 #animation-container {
     position: relative;
     width: 100%;
     height: 400px;
-    background: linear-gradient(to bottom, #74b9ff 0%, #a29bfe 100%);
-    border-radius: 10px;
+    background: linear-gradient(to bottom, #63b3ed 0%, #ebf8ff 100%);
+    border-radius: 8px;
     overflow: hidden;
-    margin: 20px 0;
-    border: 3px solid #636e72;
+    border: 2px solid #4a5568;
 }
 
 #ground-line {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 30px;
-    background-color: #27ae60;
+    height: 25px;
+    background-color: #38a169;
 }
 
 #soldier-parachute {
@@ -82,44 +78,69 @@ button:disabled { background-color: #b2bec3; cursor: not-allowed; }
 }
 
 .parachute {
-    background-color: #d63031;
-    border-radius: 100px 100px 0 0;
+    background-color: #e53e3e; /* Red Canopy */
+    border-radius: 60px 60px 0 0;
     transition: width 0.3s ease, height 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    z-index: 2;
+    width: 40px;
+    height: 20px;
 }
 
-.parachute-strings {
-    position: absolute;
-    top: 10px;
+/* Strings connecting canopy to soldier */
+.strings-container {
     width: 100%;
-    height: 40px;
-    border-left: 1px solid #fff;
-    border-right: 1px solid #fff;
-    z-index: 1;
+    height: 30px;
+    position: relative;
 }
 
-/* Toy Soldier Shape */
+.string {
+    position: absolute;
+    width: 1px;
+    height: 35px;
+    background-color: #4a5568;
+    top: -5px;
+}
+.string.left { left: 10%; transform: rotate(15deg); }
+.string.right { right: 10%; transform: rotate(-15deg); }
+
+/* The Toy Soldier Shape */
 .toy-soldier {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 5px;
+    margin-top: 0px;
 }
 
-.head { width: 8px; height: 8px; background: #4b6584; border-radius: 50%; }
-.torso { width: 10px; height: 14px; background: #4b6584; border-radius: 2px; margin-top: 1px; }
-.arms { width: 18px; height: 4px; background: #4b6584; margin-top: -10px; border-radius: 2px; }
-.legs { width: 10px; height: 10px; border-left: 3px solid #4b6584; border-right: 3px solid #4b6584; margin-top: 1px; }
+.soldier-head {
+    width: 10px;
+    height: 10px;
+    background-color: #2d3748; /* Dark Army Green/Grey */
+    border-radius: 50%;
+}
+
+.soldier-body {
+    width: 14px;
+    height: 18px;
+    background-color: #2d3748;
+    border-radius: 3px;
+    margin-top: 1px;
+}
+
+.soldier-legs {
+    width: 14px;
+    height: 12px;
+    border-left: 5px solid #2d3748;
+    border-right: 5px solid #2d3748;
+}
 
 /* Data Output */
 .data-output {
+    margin-top: 15px;
     padding: 15px;
-    background: #2d3436;
+    background: #2d3748;
+    border-radius: 8px;
     color: white;
-    border-radius: 10px;
 }
 
-.time-display { font-size: 1.4rem; font-weight: bold; }
-#time-output { color: #55efc4; }
-.unit { font-size: 0.9rem; color: #b2bec3; }
+.time-box { font-size: 1.5rem; font-weight: bold; }
+#time-output { color: #68d391; }
+.unit { font-size: 1rem; color: #a0aec0; }
