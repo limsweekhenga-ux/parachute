@@ -14,7 +14,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 800px;
+    max-width: 600px;
     text-align: center;
 }
 
@@ -33,118 +33,56 @@ h1 {
     background-color: #fafafa;
 }
 
-#surface-select {
-    padding: 8px 12px;
-    font-size: 16px;
-    border-radius: 4px;
-}
+/* --- ANIMATION STYLING --- */
 
-/* Simulation Area Visuals */
-#simulation-area {
+#animation-container {
     position: relative;
-    height: 150px;
+    width: 100%;
+    height: 500px; /* Defines the visible drop zone */
+    margin: 20px auto;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 80%); /* Sky background */
     border: 1px solid #ccc;
-    margin-top: 20px;
     overflow: hidden;
-    display: flex;
-    align-items: flex-end; 
 }
 
-#surface-display {
+#ground-line {
     position: absolute;
-    width: 100%;
-    height: 50px; 
     bottom: 0;
-    border-top: 5px solid #333;
-}
-
-#block-and-spring {
-    transition: transform 0.05s ease-out; 
-    position: absolute;
-    bottom: 50px; 
-    left: 10%;
-    display: flex;
-    /* IMPORTANT: Align items to the left to keep the spring next to the block */
-    align-items: center; 
-    z-index: 10; 
-}
-
-#wood-block {
-    width: 60px;
-    height: 40px;
-    background-color: #8B4513; 
-    border: 1px solid #65300d;
-    cursor: grab; 
-}
-
-/* --- SPRING BALANCE STYLES --- */
-.spring-balance {
-    display: flex;
-    align-items: center;
-    /* Margin to separate the block and the spring slightly */
-    margin-left: 5px; 
-}
-
-.spring-hook {
-    width: 10px;
-    height: 15px;
-    background-color: #555;
-    border-radius: 0 50% 50% 0; /* Creates a hook shape */
-}
-
-.scale-body {
-    width: 100px; /* Width of the balance tube */
-    height: 25px;
-    background-color: #c9c9c9;
-    border: 2px solid #666;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-}
-
-.scale-indicator {
-    /* This element simulates the red/black measuring scale */
-    position: absolute;
-    right: 0; /* Anchors the right side */
     width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, #ccc 0%, #ccc 80%, #d9534f 80%, #d9534f 100%); 
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Text starts on the left */
-    padding-left: 5px;
-    box-sizing: border-box;
-    font-weight: bold;
-    font-size: 0.9em;
-    color: #000000;
-    /* Transition applied by JS to stretch the scale */
-    transition: transform 0.05s ease-out; 
+    height: 50px;
+    background-color: #4CAF50; /* Green ground */
+    border-top: 5px solid #38763C;
 }
 
+#soldier-parachute {
+    position: absolute;
+    left: 50%;
+    top: 0; /* Starts at the top */
+    transform: translateX(-50%);
+    /* The transition is set by JavaScript */
+}
 
-/* Specific Surface Styles (Updated by JavaScript) */
-.plastic { background-color: #D3E0EA; }
-.metal { background-color: #A9A9A9; }
-.sandpaper { background-color: #CCAA99; background-image: repeating-linear-gradient(45deg, #775544 0, #775544 1px, transparent 1px, transparent 5px); }
-.carpet { background-color: #4CAF50; background-image: radial-gradient(#6BBF70 10%, transparent 11%); background-size: 10px 10px; }
+.parachute {
+    width: 80px;
+    height: 40px;
+    background-color: rgba(255, 165, 0, 0.7); /* Orange parachute */
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    margin-bottom: 5px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
 
+.soldier {
+    width: 10px;
+    height: 20px;
+    background-color: #000;
+    margin: 0 auto;
+}
 
 /* Data Output Styling */
 .data-output p {
-    margin: 5px 0;
-    text-align: left;
-    padding-left: 20px;
-}
-
-.feedback-message {
+    font-size: 1.2em;
     font-weight: bold;
-    margin-top: 10px;
-    min-height: 20px; 
 }
-
-#required-force-display {
-    color: #5cb85c;
-    font-size: 1.1em;
+#time-output {
+    color: #d9534f;
 }
